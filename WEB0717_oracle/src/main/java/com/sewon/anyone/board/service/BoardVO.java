@@ -7,7 +7,7 @@ import com.sewon.anyone.cmn.DTO;
 
 /**
  * @author Sewonit
- * 처음 수정 commit
+ * master 세번째 수정
  *
  */
 public class BoardVO extends DTO {
