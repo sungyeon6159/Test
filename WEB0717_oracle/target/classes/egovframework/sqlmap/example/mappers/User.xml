@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sewon.anyone.member.service.imple.UserMapper">
+
+	<resultMap id="userDetail" type="com.sewon.anyone.member.service.UserVO">
+		<result property="userNo" column="user_no"/>
+		<result property="userId" column="user_id"/>
+		<result property="nickName" column="nick_name"/>
+		<result property="userName" column="user_name"/>
+		<result property="passwd" column="passwd"/>
+		<result property="authLevel" column="auth_level"/>
+		<result property="loginCnt" column="login_cnt"/>
+		<result property="mobile" column="mobile"/>
+		<result property="email" column="email"/>
+		<result property="addr" column="addr"/>
+		<result property="modId" column="mod_id"/>
+		<result property="regId" column="reg_id"/>
+		<result property="modDate" column="mod_date"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="num" column="rnum"/>
+		<result property="totalCnt" column="total_cnt"/>
+	</resultMap>
+
+	<!-- 회원가입  -->
+	<insert id="doInsert" parameterType="UserVO">
+					INSERT INTO USERS (                         
+					    user_no,                                
+					    user_id,
+					    nick_name,
+					    user_name,                                                  
+					    passwd,
+					    auth_level,
+    					login_cnt,
+					    mobile,
+   						email,
+					    mod_id,                                 
+					    reg_id,                                 
+					    mod_date,                               
+					    reg_date                                
+					) VALUES (                                  
+					    SEQ_USER.NEXTVAL    
+					   ,#{userId}
+					   ,#{nickName}
+					   ,#{userName}         
+					   ,#{passwd}
+					   ,1
+					   ,#{loginCnt}
+					   ,#{mobile}
+					   ,#{email}
+					   ,#{modId}         
+					   ,#{regId}         
+					   ,TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+					   ,TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+					)                   											
+	</insert>
+ 	 
+ 	<!-- id check -->
+    <select id="idCheck" parameterType="UserVO" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM USERS
+		WHERE UPPER(USER_ID) = UPPER(#{userId,jdbcType=VARCHAR})
+    </select>
+
+    <!-- pass check -->
+    <select id="passCheck" parameterType="UserVO" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM USERS
+		WHERE UPPER(USER_ID) = UPPER(#{userId,jdbcType=VARCHAR})
+		AND   PASSWD  = #{passwd,jdbcType=VARCHAR}
+    </select>
+    
+     <!-- 단건조회 -->
+    <select id="doSelectOne" parameterType="UserVO" resultType="UserVO">
+		SELECT
+			    user_no as userNo,
+			    user_id as userId,
+			    nick_name as nickName,
+			    user_name as userName,
+			    passwd,
+			    TO_CHAR(auth_level),
+			    login_cnt as loginCnt,
+			    mobile,
+			    email,
+			    addr,
+			    mod_id as modId,
+			    reg_id as regId,
+			    TO_CHAR(MOD_DATE,'YYYY/MM/DD ') as modDate,
+			    TO_CHAR(REG_DATE,'YYYY/MM/DD ') as regDate,
+			    ROWNUM as num
+			    
+		 FROM
+	   		    users
+		WHERE UPPER(USER_ID) = UPPER(#{userId,jdbcType=VARCHAR})
+    </select>
+
+
+
+
+	
+
+</mapper>
