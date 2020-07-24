@@ -33,6 +33,7 @@
     					login_cnt,
 					    mobile,
    						email,
+   						addr,
 					    mod_id,                                 
 					    reg_id,                                 
 					    mod_date,                               
@@ -45,8 +46,9 @@
 					   ,#{passwd}
 					   ,1
 					   ,#{loginCnt}
-					   ,#{mobile}
+					   ,REGEXP_REPLACE(#{mobile},'(.{3})(.+)(.{4})','\1-\2-\3')
 					   ,#{email}
+					   ,#{addr}
 					   ,#{modId}         
 					   ,#{regId}         
 					   ,TO_CHAR(SYSDATE, 'YYYY-MM-DD')

@@ -1,6 +1,6 @@
 <%--
   /**
-  * Class Name : 
+  * Class Name :  0724
   * Description : 
   * Modification Information
   *
@@ -66,7 +66,7 @@ em.error {
             </svg>
 		</div>
 	</div>
-	<!--*******************
+	<!--*********************************************************************
         Preloader end
        ********************-->
 	<div>
@@ -124,7 +124,10 @@ em.error {
 									</tr>
 									<tr>
 										<td>
-										<input type="text" class="form-control addr" name="addr" id="addr" placeholder="주소 api"/>
+										<input type="text" class="form-control addr" name="addr" id="addr" placeholder="주소 " readonly="readonly" style="display:inline-block"/>
+										<input type="text" class="form-control addr" name="addr_detail" id="addr_detail" placeholder="상세주소 "  style="display:inline-block"/>
+										<input type="hidden" onclick="javascript:doRetrieve();" class="col-lg-3 col-sm-3 col-xs-3 btn btn-primary btn-lg" value="조회하기" " >
+										<input type="button" onclick="searchKakaoAddress();" class="col-lg-3 col-sm-3 col-xs-3 btn btn-primary btn-lg" value="주소검색" />
 									    </td>
 									</tr>
 									<tr>
@@ -156,19 +159,41 @@ em.error {
 	<!-- jQuery validator -->
 	<script src="${hContext}/views/js/jquery.validate.js"></script>
 	<!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-	<script src="${hContext}/views/js/bootstrap.min.js">
-		
+	<script src="${hContext}/views/js/bootstrap.min.js"></script>
+	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=639b35f7e3646b98692013b4830ce2da&libraries=services"></script>
 	</script>
 
 	<!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-
+	<!-- devU01TX0FVVEgyMDIwMDcyNDA4NDIxOTEwOTk4NzQ= -->
 	<script type="text/javascript">
-		function signUp() {
+		// 주소 검색 
+		function searchKakaoAddress(){
+	    console.log("----- 주소 검색 시작 -----");
+		    new daum.Postcode({
+	            oncomplete: function(data) {
+	            	console.log("searching result",data);
+	            	console.log("searching result"+data);
+	            	
+	                var addr = data.address; // 최종 주소 변수
+	
+	                // 주소 정보를 해당 필드에 넣는다.
+	                document.getElementById("addr").value = addr;
+	           	
+	            }
+	        }).open();
+	   
+	}
+	
+	
+/* 		function signUp() {
 			//console.log("doRetrieve()");
 			var frm = document.signUp_frm;
 			frm.action = "${hContext}/member/resgister.do";
 			frm.submit();
-		}
+		} */
+	
+	
 
 		function bindEventHandler() {
 			$("#signUp_form")
@@ -322,12 +347,20 @@ em.error {
 													"userName" : $("#userName").val(),
 													"passwd" : $("#passwd").val(),
 													"email" : $("#email").val(),
-													"phone" : $("#phone1").val()+ $("#phone2").val()+ $("#phone3").val()
-													//,"주소" : "1"
+													"phone" : $("#phone1").val()+ $("#phone2").val()+ $("#phone3").val(),
+													"addr" : $("#addr").val()+' '+$("#addr_detail").val()
 												},
 												success : function(data) { //성공
+													console.log("data:",data);
+													
+													var data01 = data.nickName;
+													console.log("data",data01);
+													
+													var parseData = $.parseJSON(data);
+													console.log(parseData);
+													console.log(parseData.nickName);
+													
 													goLoginPage();
-													console.log("data:" + data);
 												/* 	var parseData = $.parseJSON(data);
 													if (parseData.msgId == "1") {
 														alert(parseData.msgMsg);
@@ -352,7 +385,10 @@ em.error {
 		function goLoginPage() {
 			alert('회원가입 되었습니다. 로그인해주세요.');
 			//location.href = "/WEB-INF/jsp/egovframework/example/login/login.jsp";
-			/**TODO */
+			/**   <TODO>
+					1) login.do는 json 으로 return 되서 바로 붙지 못함 -> 게시판으로 일단 이동
+					2) session 
+			*/
 			  location.href = "${hContext}/board/do_retrieve.do";
 		};
 

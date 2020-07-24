@@ -213,15 +213,19 @@ public class UserController {
 		
 //		String phone1 = (String) req.getAttribute("phone");
 //		LOGGER.debug("------getAttribute-------"+phone1);
-		String phone11 = req.getParameter("phone");
-		LOGGER.debug("------getParameter-------"+phone11);
+		String mobile = req.getParameter("phone");
+		String addr = req.getParameter("addr");
+		LOGGER.debug("------getParameter-------"+mobile);
+		LOGGER.debug("------getParameter-------"+addr);
 		
-	
-		user.setMobile(phone11);
+		// 1. mobile setting
+		user.setMobile(mobile);
+		
 		user.setModId(user.getUserId());
 		user.setRegId(user.getUserId());
 		
-		
+		//2. addr + addr_detail setting
+		user.setAddr(addr);
 		
 		LOGGER.debug("============param= "+ user);
 		
